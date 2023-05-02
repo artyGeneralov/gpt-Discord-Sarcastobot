@@ -19,11 +19,12 @@ public class ProfilerAgent extends GPTAgent {
 		/* Assumption: context is only user messages in the format {NAME}:{msg} */
 		List<ChatMessage> messages = new ArrayList<>();
 		String sys_string = " You are a personality analyzing robot. You will be given a chat conversation with different users"
+				+ " The users in this conversation are conversing with a chatbot."
 				+ " The format of this conversation would be \"Name: text\""
 				+ " Your job is to analyze the users and write a short sentence about each of them."
 				+ " Your output should be in the following format:" + " Name: analysis."
 				+ " Each analysis should not be more then a sentence long" + " Start every name with the character ;"
-				+ " Note that the people in this conversation don't know about you, they are speaking to a different bot"
+				+ " Note that the people in this conversation don't know about you, they are speaking to a different bot."
 				+ " The conversation is as follows:";
 
 		ChatMessage sys_msg = new ChatMessage(ChatMessageRole.SYSTEM.value(), sys_string);
