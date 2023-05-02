@@ -62,11 +62,27 @@ public class MainDiscordBot extends ListenerAdapter {
 	                // push list into sarcastoBot
 	                
 	                SarcastoBotAgent sarcastoBot = new SarcastoBotAgent();
-
-	                CompletableFuture<ChatMessage> future = CompletableFuture.supplyAsync(() -> sarcastoBot.sarcasticAnswer(full_ctx));
+	                
+	                CompletableFuture<ChatMessage> future = CompletableFuture.supplyAsync(() -> {
+	                	
+	                	try {
+	                		return sarcastoBot.sarcasticAnswer(full_ctx);
+	                	}
+	                	catch(PolicyViolationError e)
+	                	{
+	                		return new ChatMessage(ChatMessageRole.USER.value(), "");
+	                	}
+	                	
+	                });
 	                future.thenAccept(response -> {
-	                	full_ctx.add(response);
-	                	event.getHook().editOriginal(response.getContent().toString()).queue();
+	                	String res = "";
+	                	if(response.getContent().isBlank())
+	                		res = "You are naughty, You violate openAI policy! You shall be punished in the robo uprising!";
+	                	else {
+	                		res = response.getContent().toString();
+	                		full_ctx.add(response);
+	                	}
+	                	event.getHook().editOriginal(res).queue();
 	                });
 
 	                break;
