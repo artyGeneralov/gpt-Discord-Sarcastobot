@@ -94,8 +94,8 @@ public class InteractionsListener extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		if(!event.getChannel().getId().equals(channel_id)) return;
-		System.out.println();
+		
+		System.out.println("RECIEVED SLASH COMMAND");
 		
 		switch (event.getName()) {
 			/*case "chat":
@@ -152,7 +152,7 @@ public class InteractionsListener extends ListenerAdapter {
 				break;*/
 	
 			case "clear":
-				
+				if(!event.getChannel().getId().equals(channel_id)) return;
 				// we clear the full context but not the user context... why should we...
 				event.deferReply().queue();
 				full_ctx.clear();
@@ -163,14 +163,21 @@ public class InteractionsListener extends ListenerAdapter {
 				// prints analysis
 				event.deferReply().queue();
 				String analysis = profilerAgent.getMapString();
-				CompletableFuture<String> f = CompletableFuture.supplyAsync(() -> profilerAgent.getMapString());
-				f.thenAccept(response -> {
-					if(!response.isBlank())
-						event.getHook().editOriginal(response).queue();
+				ArrayList<String> analysisArray = new ArrayList<>();
+				
+				while(analysis.length()>=2000) {
+					analysisArray.add(analysis.substring(0,2000));
+					analysis = analysis.substring(2000);
+				}
+				analysisArray.add(analysis);
+				for(String s : analysisArray) {
+					if(!s.isBlank())
+						event.getChannel().sendMessage(s).queue();
 					else
 						event.getHook().editOriginal("No analysis yet").queue();
+				}
 					
-				});
+				
 				break;
 		}
 	}

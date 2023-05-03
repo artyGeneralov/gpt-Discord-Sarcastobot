@@ -136,6 +136,7 @@ public class ProfilerAgent extends ModeratedBot {
 					insideName = false;
 					curName = curName.trim();
 					curName = curName.replace(":", "");
+					curName = curName.replace("\n", "");
 					
 					// insert into map if does not exist
 					if (!userData.containsKey(curName))
@@ -169,6 +170,7 @@ public class ProfilerAgent extends ModeratedBot {
 	
 	// returns a pretty map
 	public String getMapString(){
+		
 		if(userData.isEmpty())
 			return " ";
 		String msg = "";
@@ -179,6 +181,7 @@ public class ProfilerAgent extends ModeratedBot {
 				msg += "* " +val + "\n";
 			msg += "\n__***END_RECORD***__\n \n";
 		}
+		System.out.println(msg);
 		return msg;
 	}
 	

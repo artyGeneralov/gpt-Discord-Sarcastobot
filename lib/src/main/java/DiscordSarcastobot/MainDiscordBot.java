@@ -55,11 +55,11 @@ public class MainDiscordBot extends ListenerAdapter {
 
 	public static void main(String[] args) {
 		
-		
+		InteractionsListener listener = new InteractionsListener();
 		/* Boring discord stuff */
 		JDA jda = JDABuilder.createDefault(discordToken)
-				.addEventListeners(new InteractionsListener())
-				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
+				.addEventListeners(listener)
+				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.SCHEDULED_EVENTS)
 				.build();
 		try {
 			jda.awaitReady();
@@ -68,8 +68,7 @@ public class MainDiscordBot extends ListenerAdapter {
 		}
 		jda.updateCommands().addCommands(
 				Commands.slash("anal", "show analysis BETA!!!"),
-				//Commands.slash("clear", "This will clear the bot memory"),
-				Commands.slash("chat", "This will be a gpt answer")
+				Commands.slash("clear", "This will clear the bot memory")
 						.setDefaultPermissions(
 								DefaultMemberPermissions.enabledFor(net.dv8tion.jda.api.Permission.ALL_PERMISSIONS))
 						.addOption(OptionType.STRING, "prompt", "The User prompt"))
