@@ -75,7 +75,7 @@ public class ProfilerAgent extends ModeratedBot {
 		
 	}
 
-	// the main profiling function. self explanatory
+
 	void analyzeUsers(List<ChatMessage> context) {
 		/* Assumption: context is only user messages in the format {NAME}:{msg} */
 		List<ChatMessage> messages = new ArrayList<>();
@@ -91,11 +91,11 @@ public class ProfilerAgent extends ModeratedBot {
 		ChatMessage sys_msg = new ChatMessage(ChatMessageRole.SYSTEM.value(), sys_string);
 		messages.add(sys_msg);
 		for(ChatMessage msg : context) {
-			ChatMessage curmsg = new ChatMessage(ChatMessageRole.USER.value(), msg.getContent().toString());
+			ChatMessage curmsg = new ChatMessage(ChatMessageRole.USER.value(), msg.getContent());
 			if(moderate(msg)) // skip a message if its inappropriate to OpenAI policy
 				continue;
 			messages.add(curmsg);
-			System.out.println(curmsg.getContent().toString());
+			System.out.println(curmsg.getContent());
 		}
 
 		ChatCompletionRequest ccr = ChatCompletionRequest
@@ -116,7 +116,7 @@ public class ProfilerAgent extends ModeratedBot {
 	// gpt outputs its format in a predictable way, so we parse it. also write to the file here.
 	void mapResponse(ChatMessage response, boolean fromFile) {
 		int count = 0;
-		String msg_string = response.getContent().toString();
+		String msg_string = response.getContent();
 		
 		// write to file here
 		
@@ -157,7 +157,7 @@ public class ProfilerAgent extends ModeratedBot {
 					curMsg = curMsg.replace("\n","");
 					curVal.add(curMsg);
 					userData.put(curName, curVal);
-					if(!fromFile) writeToFile(curMsg+"\n");
+					if(!fromFile) writeToFile(curMsg);
 					insideName = true;
 					curName = "";
 					curMsg = "";
@@ -182,6 +182,26 @@ public class ProfilerAgent extends ModeratedBot {
 		return msg;
 	}
 	
+	// returns a pretty map for a single user
+	public String getMapString(String user) {
+		if(userData.isEmpty() || !userData.containsKey(user) || userData.get(user).isEmpty())
+			return " ";
+		String msg = "";
+		msg += "__**"+user+"**__" + " :: \n";
+		for(String val : userData.get(user))
+			msg += "* " +val + "\n";
+		msg += "\n__***END_RECORD***__\n \n";
+		return msg;
+	}
+	
+	public String getUsers() {
+		if(userData.isEmpty())
+			return " ";
+		String msg = "";
+		for(String key : userData.keySet())
+			msg += "  " + key + "  ";
+		return msg;
+	}
 	
 	public void writeToFile(String analysis) {
 		try {
