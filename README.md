@@ -16,8 +16,7 @@
             profiler agent now only gets information about the user that called it.<br>
             for the other users - he only knows their names.
             This was due to two reasons:
-            1 As the amount of users grew, the analysis started to take up most of the context window for gpt.
-            2 The bot started to get confused about who he was talking to.
-            
+            1.) As the amount of users grew, the analysis started to take up most of the context window for gpt.
+            2.) The bot started to get confused about who he was talking to.
             Also made the bot respond to messages instead of /chat, this seems more fun.
             </p>
