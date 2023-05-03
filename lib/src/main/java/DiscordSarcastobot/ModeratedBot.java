@@ -27,4 +27,19 @@ public class ModeratedBot extends GPTAgent {
 			System.err.println("prompt:: " + latest.getContent().toString() + " ~~ is flagged " + modScore.flagged);
 		return modScore.flagged;
 	}
+	
+	protected boolean moderate(ChatMessage prompt) {
+		
+		ModerationRequest moderationRequest = ModerationRequest.builder()
+				.input(prompt.getContent().toString())
+				.model("text-moderation-latest")
+				.build();
+		
+		Moderation modScore = service.createModeration(moderationRequest).getResults().get(0);
+		if(!modScore.isFlagged())
+			System.out.println("prompt:: " + prompt.getContent().toString() + " ~~ is flagged " + modScore.flagged);
+		else
+			System.err.println("prompt:: " + prompt.getContent().toString() + " ~~ is flagged " + modScore.flagged);
+		return modScore.flagged;
+	}
 }
