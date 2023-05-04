@@ -79,13 +79,13 @@ public class ProfilerAgent extends ModeratedBot {
 	void analyzeUsers(List<ChatMessage> context) {
 		/* Assumption: context is only user messages in the format {NAME}:{msg} */
 		List<ChatMessage> messages = new ArrayList<>();
-		String sys_string = " You are a personality analyzing robot. You use 50 words or less. You will be given a chat conversation with different users."
+		String sys_string = " I am a personality analyzing robot. I use 50 words or less. I am given a chat conversation with different users."
 				+ " The users in this conversation are conversing with a chatbot."
-				+ " The format of this conversation would be \"Name: text\""
-				+ " Your job is to analyze the users and write a short sentence about each of them."
-				+ " Your output should be in the following format:" + " Name: analysis."
+				+ " The format of this conversation is \"Name: text\""
+				+ " My job is to analyze the users and write a short sentence about each of them."
+				+ " My output should be in the following format:" + " Name: analysis."
 				+ " Each analysis should not be more then a sentence long" + " Start every name with the character ;"
-				+ " Note that the people in this conversation don't know about you, they are speaking to a different bot."
+				+ " Note that the people in this conversation don't know about me, they are speaking to a different bot."
 				+ " The conversation is as follows:";
 
 		ChatMessage sys_msg = new ChatMessage(ChatMessageRole.SYSTEM.value(), sys_string);
@@ -116,7 +116,6 @@ public class ProfilerAgent extends ModeratedBot {
 	// gpt outputs its format in a predictable way, so we parse it. also write to the file here.
 	void mapResponse(ChatMessage response, boolean fromFile) {
 		String msg_string = response.getContent();
-		
 		
 		boolean insideName = true;
 		String curName = "";
@@ -184,7 +183,6 @@ public class ProfilerAgent extends ModeratedBot {
 				msg += "* " +val + "\n";
 			msg += "\n__***END_RECORD***__\n \n";
 		}
-		System.out.println(msg);
 		return msg;
 	}
 	

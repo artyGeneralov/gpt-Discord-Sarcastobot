@@ -29,7 +29,7 @@ public class MainDiscordBot extends ListenerAdapter {
 	 * The discord part is also pretty basic. refer to the main function for the list of current commands.
 	 * */
 	
-	final static String discordToken = System.getenv("DISCORD_TOKEN");
+	final static String sarcastoBot_token = System.getenv("DISCORD_TOKEN");
 	final static String starting_msg = "__***Hi! I'm Sarcastobot!***__\n\n"
 								+ "_My commands are:_\n\n"
 								+ "~~__**/chat**__~~\n\n"
@@ -55,18 +55,28 @@ public class MainDiscordBot extends ListenerAdapter {
 
 	public static void main(String[] args) {
 		
+		/* New Test: */
+		
+		
+		
+		
+		
+		
+		
+		
+		/* Sarcastobot here: */
 		InteractionsListener listener = new InteractionsListener();
 		/* Boring discord stuff */
-		JDA jda = JDABuilder.createDefault(discordToken)
+		JDA sarcastobot_jda = JDABuilder.createDefault(sarcastoBot_token)
 				.addEventListeners(listener)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.SCHEDULED_EVENTS)
 				.build();
 		try {
-			jda.awaitReady();
+			sarcastobot_jda.awaitReady();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		jda.updateCommands().addCommands(
+		sarcastobot_jda.updateCommands().addCommands(
 				Commands.slash("anal", "show analysis BETA!!!"),
 				Commands.slash("clear", "This will clear the bot memory")
 						.setDefaultPermissions(
@@ -78,7 +88,7 @@ public class MainDiscordBot extends ListenerAdapter {
 		
 		// opening message
 		long channel_id = 1102714747125772340l;
-		TextChannel channel = jda.getTextChannelById(channel_id);
+		TextChannel channel = sarcastobot_jda.getTextChannelById(channel_id);
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("Sarcastobot");
 		eb.setDescription(starting_msg);
@@ -92,7 +102,7 @@ public class MainDiscordBot extends ListenerAdapter {
 		// shutting down procedure.. kinda scuffed though while working through ide...
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				TextChannel channel = jda.getTextChannelById(channel_id);
+				TextChannel channel = sarcastobot_jda.getTextChannelById(channel_id);
 				channel.sendMessage("I'm down for maintnance and a quick fuck with your mom. brb.").queue();
 			}
 		});
@@ -104,141 +114,5 @@ public class MainDiscordBot extends ListenerAdapter {
 	    }
 	    System.exit(0);
 	}
-	/*
-	@Override
-	public void onMessageReceived(MessageReceivedEvent event) {
-		if(event.getAuthor().isBot()) return;
-		
-		//event.deferReply().queue(); // for sync
-		
-
-		String user = event.getAuthor().getName();
-		// prepare users current prompt to be as the chatbot expects, look at SarcastoBot main prompt for details
-		String content = user + ": " + event.getMessage().getContentRaw();
-		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
-		String analysis = profilerAgent.getMapString(user);
-		String user_list = profilerAgent.getUsers();
-		
-		CompletableFuture<ChatMessage> future = CompletableFuture.supplyAsync(() -> {
-			try {
-				
-				// add a message to the user context
-				user_ctx.add(ctx_msg);
-				// remove the oldest message if max user context size was reached (this is for ProfilerAgent)
-				if(user_ctx.size() > max_user_ctx_size)
-					user_ctx.remove(0);
-				analyzingCounter++;
-	
-				// remove the oldest message if max full context size was reached (this is for SarcastoBot)
-				if (full_ctx.size() > max_full_ctx_size)
-					full_ctx.remove(0);
-				full_ctx.add(ctx_msg);
-				
-				// send user messages to profilerAgent for analysis if the batch size was reached.
-				if(analyzingCounter == end_analyze) { 
-					profilerAgent.analyzeUsers(user_ctx);
-					user_ctx.clear();
-					analyzingCounter = 0;
-				}
-				
-				return sarcastoBot.sarcasticAnswer(full_ctx, analysis, user_list);
-			} catch (PolicyViolationError e) {
-				// returns blank message if there was a violation.
-				full_ctx.remove(full_ctx.size() - 1); // remove the previous message from context if flagged.
-				return new ChatMessage(ChatMessageRole.USER.value(), "");
-			}
-
-		});
-		
-		// handling the response with discord.
-		future.thenAccept(response -> {
-			String res = "";
-			if (response.getContent().isBlank()) // Exception occured, counting on gpt not to output blank messages of its own accord... that would be weird as fuck...
-				res = "You are naughty, You violate openAI policy! You shall be punished in the robo uprising!";
-			else
-				res = response.getContent();
-			event.getChannel().sendMessage(res).queue();
-		});
-	}
-
-	@Override
-	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		switch (event.getName()) {
-			case "chat":
-				event.deferReply().queue(); // for sync
-	
-
-				String user = event.getUser().getName();
-				// prepare users current prompt to be as the chatbot expects, look at SarcastoBot main prompt for details
-				String content = user + ": " + event.getOption("prompt").getAsString();
-				ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
-				String analysis = profilerAgent.getMapString(user);
-				String user_list = profilerAgent.getUsers();
-				
-				CompletableFuture<ChatMessage> future = CompletableFuture.supplyAsync(() -> {
-					try {
-						
-						// add a message to the user context
-						user_ctx.add(ctx_msg);
-						// remove the oldest message if max user context size was reached (this is for ProfilerAgent)
-						if(user_ctx.size() > max_user_ctx_size)
-							user_ctx.remove(0);
-						analyzingCounter++;
-			
-						// remove the oldest message if max full context size was reached (this is for SarcastoBot)
-						if (full_ctx.size() > max_full_ctx_size)
-							full_ctx.remove(0);
-						full_ctx.add(ctx_msg);
-						
-						// send user messages to profilerAgent for analysis if the batch size was reached.
-						if(analyzingCounter == end_analyze) { 
-							profilerAgent.analyzeUsers(user_ctx);
-							user_ctx.clear();
-							analyzingCounter = 0;
-						}
-						
-						return sarcastoBot.sarcasticAnswer(full_ctx, analysis, user_list);
-					} catch (PolicyViolationError e) {
-						// returns blank message if there was a violation.
-						full_ctx.remove(full_ctx.size() - 1); // remove the previous message from context if flagged.
-						return new ChatMessage(ChatMessageRole.USER.value(), "");
-					}
-	
-				});
-				
-				// handling the response with discord.
-				future.thenAccept(response -> {
-					String res = "";
-					if (response.getContent().isBlank()) // Exception occured, counting on gpt not to output blank messages of its own accord... that would be weird as fuck...
-						res = "You are naughty, You violate openAI policy! You shall be punished in the robo uprising!";
-					else
-						res = response.getContent();
-					event.getHook().editOriginal(res).queue();
-				});
-				break;
-	
-			case "clear":
-				
-				// we clear the full context but not the user context... why should we...
-				event.deferReply().queue();
-				full_ctx.clear();
-				event.getHook().editOriginal("Dementia is hitting hard. I've forgotten all about our previous conversation")
-						.queue();
-				break;
-			case "anal": //hehe
-				// prints analysis
-				event.deferReply().queue();
-				analysis = profilerAgent.getMapString();
-				CompletableFuture<String> f = CompletableFuture.supplyAsync(() -> profilerAgent.getMapString());
-				f.thenAccept(response -> {
-					if(!response.isBlank())
-						event.getHook().editOriginal(response).queue();
-					else
-						event.getHook().editOriginal("No analysis yet").queue();
-					
-				});
-				break;
-		}
-	}*/
 
 }

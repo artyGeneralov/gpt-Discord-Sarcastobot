@@ -25,11 +25,11 @@ public class InteractionsListener extends ListenerAdapter {
 	List<ChatMessage> user_ctx = new ArrayList<>(); // the list of user messages to be passed to profilerAgent, it is capped by max_user_ctx_size and will be flushed every time the batch is sent for analysis.
 	
 	int analyzingCounter = 0; // we will count how many messages we have in the current batch
-	int end_analyze = 3; // send batches of this size for analysis
-	int max_user_ctx_size = 3; // cap for user_cts
+	int end_analyze = 5; // send batches of this size for analysis
+	int max_user_ctx_size = 5; // cap for user_cts
 	int max_full_ctx_size = 6; // Cap for full_ctx
 	
-
+	
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
@@ -54,19 +54,18 @@ public class InteractionsListener extends ListenerAdapter {
 				// add a message to the user context
 				user_ctx.add(ctx_msg);
 				// remove the oldest message if max user context size was reached (this is for ProfilerAgent)
-				if(user_ctx.size() > max_user_ctx_size)
-					user_ctx.remove(0);
+				//if(user_ctx.size() > max_user_ctx_size)
+				//	user_ctx.remove(0);
 				analyzingCounter++;
 	
 				// remove the oldest message if max full context size was reached (this is for SarcastoBot)
-				if (full_ctx.size() > max_full_ctx_size)
-					full_ctx.remove(0);
+				while (full_ctx.size() >= max_full_ctx_size)
+						full_ctx.remove(0);
 				full_ctx.add(ctx_msg);
 				
 				// send user messages to profilerAgent for analysis if the batch size was reached.
-				if(analyzingCounter == end_analyze) { 
+				if(analyzingCounter >= end_analyze) { 
 					profilerAgent.analyzeUsers(user_ctx);
-					System.out.println("Content analyzed:" + user_ctx.toArray().toString());
 					user_ctx.clear();
 					analyzingCounter = 0;
 				}
@@ -116,9 +115,6 @@ public class InteractionsListener extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		
-		System.out.println("RECIEVED SLASH COMMAND");
-		
 		switch (event.getName()) {
 			/*case "chat":
 				event.deferReply().queue(); // for sync
