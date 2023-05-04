@@ -53,7 +53,7 @@ public class SarcastoBotAgent extends ModeratedBot {
 		m = new ChatMessage(ChatMessageRole.ASSISTANT.value(), analysisData 
 																+ "end of analysis.\n There is also a user list in this conversation, you currently have no analysis data on them:"
 																+ users_list
-																+ " And this is the conversation so far: ");
+																+ " If you wish to refer to a user, you do this in the following format: <@userName> And this is the conversation so far: ");
 		messages.add(m);
 		
 		for(int i = 0; i < prompt_list.size() - 1; i++) //everything but the last prompt.

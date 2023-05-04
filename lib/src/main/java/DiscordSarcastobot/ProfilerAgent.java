@@ -197,6 +197,26 @@ public class ProfilerAgent extends ModeratedBot {
 		return msg;
 	}
 	
+	public ArrayList<String> getMapStringArray() {
+		ArrayList<String> starr = new ArrayList<>();
+		if(userData.isEmpty())
+		{
+			starr.add(" ");
+			return starr;
+		}
+		String msg = "";
+		for(String key : userData.keySet())
+		{
+			msg += "__**"+key+"**__" + " :: \n";
+			for(String val : userData.get(key))
+				msg += "* " +val + "\n";
+			msg += "\n__***END_RECORD***__\n \n";
+			starr.add(msg);
+			msg = "";
+		}
+		return starr;
+	}
+	
 	public String getUsers() {
 		if(userData.isEmpty())
 			return " ";

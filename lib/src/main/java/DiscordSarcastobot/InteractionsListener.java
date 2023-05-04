@@ -162,14 +162,8 @@ public class InteractionsListener extends ListenerAdapter {
 			case "anal": //hehe
 				// prints analysis
 				event.deferReply().queue();
-				String analysis = profilerAgent.getMapString();
-				ArrayList<String> analysisArray = new ArrayList<>();
-				
-				while(analysis.length()>=2000) {
-					analysisArray.add(analysis.substring(0,2000));
-					analysis = analysis.substring(2000);
-				}
-				analysisArray.add(analysis);
+				ArrayList<String> analysisArray = profilerAgent.getMapStringArray();
+
 				for(String s : analysisArray) {
 					if(!s.isBlank())
 						event.getChannel().sendMessage(s).queue();
