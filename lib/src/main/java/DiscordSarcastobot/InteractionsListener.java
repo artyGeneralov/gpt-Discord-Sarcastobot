@@ -92,24 +92,24 @@ public class InteractionsListener extends ListenerAdapter {
 			}
 			
 			// check if message contains a reference
-			String text = "Hello <@JohnDoe>, how are you? <@JaneDoe> is also here.";
-			Pattern pattern = Pattern.compile("<@.+?>");
-			Matcher matcher = pattern.matcher(text);
-			StringBuffer sb = new StringBuffer();
-			
-			while (matcher.find()) {
-			    String replacement = "REPLACEMENT"; // generate replacement string here
-			    matcher.appendReplacement(sb, replacement);
-			}
-			matcher.appendTail(sb);
-			String result = sb.toString();
-			System.out.println(result);
+//			String text = "Hello <@JohnDoe>, how are you? <@JaneDoe> is also here.";
+//			Pattern pattern = Pattern.compile("<@.+?>");
+//			Matcher matcher = pattern.matcher(text);
+//			StringBuffer sb = new StringBuffer();
+//			
+//			while (matcher.find()) {
+//			    String replacement = "REPLACEMENT"; // generate replacement string here
+//			    matcher.appendReplacement(sb, replacement);
+//			}
+//			matcher.appendTail(sb);
+//			String result = sb.toString();
+//			System.out.println(result);
 
 			
 			
 			
 			
-			if(res.contains(user_list))
+			//if(res.contains(user_list))
 			main_message.editMessage(res).queue();
 		});
 	}

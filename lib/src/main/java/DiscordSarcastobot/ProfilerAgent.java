@@ -115,13 +115,13 @@ public class ProfilerAgent extends ModeratedBot {
 	
 	// gpt outputs its format in a predictable way, so we parse it. also write to the file here.
 	void mapResponse(ChatMessage response, boolean fromFile) {
-		int count = 0;
 		String msg_string = response.getContent();
 		
 		
 		boolean insideName = true;
 		String curName = "";
 		String curMsg = "";
+		String toWrite = "";
 		for (int i = 0; i < msg_string.length(); i++) {
 			if (insideName) {
 				// skip ';'
@@ -142,7 +142,7 @@ public class ProfilerAgent extends ModeratedBot {
 						userData.put(curName, new ArrayList<String>());
 					
 					// write to file (unless thats read from the file to avoid double writing). formatting of initial ai response should be preserved.
-					if(!fromFile) writeToFile(";"+curName+":");
+					if(!fromFile) toWrite = ";"+curName+": ";
 				}
 			} else {
 				// read message
@@ -157,7 +157,11 @@ public class ProfilerAgent extends ModeratedBot {
 					curMsg = curMsg.replace("\n","");
 					curVal.add(curMsg);
 					userData.put(curName, curVal);
-					if(!fromFile) writeToFile(curMsg);
+					
+					if(!fromFile) {
+						toWrite += curMsg;
+						writeToFile(toWrite);
+					}
 					insideName = true;
 					curName = "";
 					curMsg = "";
