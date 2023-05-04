@@ -118,7 +118,6 @@ public class ProfilerAgent extends ModeratedBot {
 		int count = 0;
 		String msg_string = response.getContent();
 		
-		// write to file here
 		
 		boolean insideName = true;
 		String curName = "";

@@ -3,6 +3,8 @@ package DiscordSarcastobot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
@@ -88,6 +90,26 @@ public class InteractionsListener extends ListenerAdapter {
 				res = response.getContent();
 				full_ctx.add(response);
 			}
+			
+			// check if message contains a reference
+			String text = "Hello <@JohnDoe>, how are you? <@JaneDoe> is also here.";
+			Pattern pattern = Pattern.compile("<@.+?>");
+			Matcher matcher = pattern.matcher(text);
+			StringBuffer sb = new StringBuffer();
+			
+			while (matcher.find()) {
+			    String replacement = "REPLACEMENT"; // generate replacement string here
+			    matcher.appendReplacement(sb, replacement);
+			}
+			matcher.appendTail(sb);
+			String result = sb.toString();
+			System.out.println(result);
+
+			
+			
+			
+			
+			if(res.contains(user_list))
 			main_message.editMessage(res).queue();
 		});
 	}
