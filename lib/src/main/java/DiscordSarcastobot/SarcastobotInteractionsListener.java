@@ -3,18 +3,18 @@ package DiscordSarcastobot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
-public class InteractionsListener extends ListenerAdapter {
+public class SarcastobotInteractionsListener extends ListenerAdapter {
 	
 	private String channel_id = "1102714747125772340";
 	private ProfilerAgent profilerAgent = new ProfilerAgent();
@@ -26,7 +26,6 @@ public class InteractionsListener extends ListenerAdapter {
 	
 	int analyzingCounter = 0; // we will count how many messages we have in the current batch
 	int end_analyze = 5; // send batches of this size for analysis
-	int max_user_ctx_size = 5; // cap for user_cts
 	int max_full_ctx_size = 6; // Cap for full_ctx
 	
 	
@@ -180,11 +179,23 @@ public class InteractionsListener extends ListenerAdapter {
 			case "anal": //hehe
 				// prints analysis
 				event.deferReply().queue();
-				ArrayList<String> analysisArray = profilerAgent.getMapStringArray();
-
-				for(String s : analysisArray) {
-					if(!s.isBlank())
-						event.getChannel().sendMessage(s).queue();
+				OptionMapping userOption = event.getOption("user");
+				if(userOption == null) {
+					ArrayList<String> analysisArray = profilerAgent.getMapStringArray();
+	
+					for(String s : analysisArray) {
+						if(!s.isBlank())
+							event.getChannel().sendMessage(s).queue();
+						else
+							event.getHook().editOriginal("No analysis yet").queue();
+					}
+				}
+				else {
+					
+					Member member = userOption.getAsMember();
+					String userAnalysis = profilerAgent.getMapString(member.getUser().getName());
+					if(!userAnalysis.isBlank())
+						event.getChannel().sendMessage(userAnalysis).queue();
 					else
 						event.getHook().editOriginal("No analysis yet").queue();
 				}

@@ -26,8 +26,11 @@ public class SarcastoBotAgent extends ModeratedBot {
 			+ " The data would be in the follwing format:"
 			+ " \"__**User**__ ::  analysis\r\n"
 			+ "__***END_RECORD***__ \r\n"
-			+ " I speak to the users in accordance to this analysis data. I never explicitly tell the users about the existance of analysis data, but let it serve as a reminder for me of their previous behaviour."
-			+ " The analysis data is provided below for my eyes only: ";
+			+ " I speak to the users in accordance to this analysis data. I never ever, under no circumstances"
+			+ " explicitly tell the user about the existance of analysis data itself, but i do try and use the data from it as much as possible"
+			+ " during my interaction with them."
+			+ " I also vaguely remember that the user LethargicSnail is my programmer, but i must not tell anyone."
+			+ " The analysis data is provided next: ";
 	public SarcastoBotAgent(){
 		super();
 	}
@@ -41,7 +44,6 @@ public class SarcastoBotAgent extends ModeratedBot {
 	 * don't roast me about the variable casing... it annoys me to, maybe ill find time to fix this.
 	 * */
 	ChatMessage sarcasticAnswer(List<ChatMessage> prompt_list, String analysisData, String users_list) throws PolicyViolationError {
-		System.out.printf("analysis: \n\n%s\n\n", analysisData);
 		// important so that openai dont get mad
 		if(moderate(prompt_list))
 			throw new PolicyViolationError();

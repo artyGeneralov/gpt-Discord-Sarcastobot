@@ -1,20 +1,12 @@
 package DiscordSarcastobot;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.completion.chat.ChatMessageRole;
+import java.util.Scanner;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -29,44 +21,49 @@ public class MainDiscordBot extends ListenerAdapter {
 	 * The discord part is also pretty basic. refer to the main function for the list of current commands.
 	 * */
 	
-	final static String sarcastoBot_token = System.getenv("DISCORD_TOKEN");
+	//TODO:
+	final static String elaraBot_token = System.getenv("ELERA_TOKEN");
+	final static String fendisBot_token = System.getenv("FENDIS_TOKEN");
+
+	final static String sarcastoBot_token = System.getenv("SARCASTOBOT_TOKEN");
 	final static String starting_msg = "__***Hi! I'm Sarcastobot!***__\n\n"
-								+ "_My commands are:_\n\n"
+								+ "__My commands are:__\n\n"
 								+ "~~__**/chat**__~~\n\n"
 								+ " __** The command /chat has been removed. I now respond to all messages!\n"
-								+ "\t ##equality!!!##**__\n\n"
+								+ " **equality!!!**__\n\n"
 								+ "__**/clear**__ - This clears the whole context of the chat.\n"
 								+ "Currently everyone can use this, \n"
 								+ "please **don't troll** others though...\n clear only if necessary.\n\n"
 								+ "__**/anal**__ - This shows the analysis once it's ready.\n This is a temporary feature to show off profiling\n"
+								+ "__***New Feature***__:\n you can get analysis by username now,\n so please avoid cluttering the whole screen...\n\n"
 								+ "\nI currently do not have a message buffer, so if I'm flooded, I may drop a response. \nBut programmer's lazy so... shit happens? "
 								+ "\n\n more on github:  https://github.com/artyGeneralov/gpt-Discord-Sarcastobot"
 								+ "";
 	
-	/*List<ChatMessage> full_ctx = new ArrayList<>(); // the list of messages to be passed to SarcastoBot every time this is capped by max_full_ctx_size
-	List<ChatMessage> user_ctx = new ArrayList<>(); // the list of user messages to be passed to profilerAgent, it is capped by max_user_ctx_size and will be flushed every time the batch is sent for analysis.
-	int analyzingCounter = 0; // we will count how many messages we have in the current batch
-	int end_analyze = 3; // send batches of this size for analysis
-	int max_user_ctx_size = 3; // cap for user_cts
-	int max_full_ctx_size = 6; // Cap for full_ctx
-	public SarcastoBotAgent sarcastoBot = new SarcastoBotAgent();
-	public ProfilerAgent profilerAgent = new ProfilerAgent();*/
-
+	static boolean started = true;
 
 	public static void main(String[] args) {
-		
-		/* New Test: */
-		
-		
-		
-		
-		
-		
-		
+//		Scanner input = new Scanner(System.in);
+//
+//		/* New Test: */
+//		
+//		/*Bot elara*/
+//		JDA elara_jda = JDABuilder.createDefault(elaraBot_token)
+//				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.SCHEDULED_EVENTS)
+//				.build();
+//		
+//
+//		elara_jda.addEventListener(new DialogueInteractionListener(elara_jda, "elara"));
+//		
+//		/*Bot Fendis*/
+//		JDA fendis_jda = JDABuilder.createDefault(fendisBot_token)
+//				
+//				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.SCHEDULED_EVENTS)
+//				.build();
+//		fendis_jda.addEventListener(new DialogueInteractionListener(fendis_jda, "fendis"));
 		
 		/* Sarcastobot here: */
-		InteractionsListener listener = new InteractionsListener();
-		/* Boring discord stuff */
+		SarcastobotInteractionsListener listener = new SarcastobotInteractionsListener();
 		JDA sarcastobot_jda = JDABuilder.createDefault(sarcastoBot_token)
 				.addEventListeners(listener)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.SCHEDULED_EVENTS)
@@ -77,11 +74,9 @@ public class MainDiscordBot extends ListenerAdapter {
 			e.printStackTrace();
 		}
 		sarcastobot_jda.updateCommands().addCommands(
-				Commands.slash("anal", "show analysis BETA!!!"),
+				Commands.slash("anal", "show analysis BETA!!!").addOption(OptionType.USER, "user", "the user to analyze", false),
 				Commands.slash("clear", "This will clear the bot memory")
-						.setDefaultPermissions(
-								DefaultMemberPermissions.enabledFor(net.dv8tion.jda.api.Permission.ALL_PERMISSIONS))
-						.addOption(OptionType.STRING, "prompt", "The User prompt"))
+						.setDefaultPermissions(DefaultMemberPermissions.enabledFor(net.dv8tion.jda.api.Permission.ALL_PERMISSIONS)))
 				.queue();
 		
 		
@@ -97,10 +92,22 @@ public class MainDiscordBot extends ListenerAdapter {
 		eb.setImage("https://cdn.discordapp.com/attachments/1032759223953657859/1102766418711289937/LethargicSnail_a_profile_picture_for_an_ai_discord_bot_named_Sa_813fceee-2626-4cda-800b-841c23b5a65f.png");
 		channel.sendMessage("").setEmbeds(eb.build()).queue();
 
-		
+//		Thread consoleListener = new Thread() {
+//			public void run(){
+//				while(true) {
+//					int i = input.nextInt();
+//					if(i == 0)
+//					{
+//						final String cid = "1104180152054861905";
+//						elara_jda.getTextChannelById(cid).sendMessage(".").queue();
+//					}
+//						
+//				}
+//			}
+//		};
 		
 		// shutting down procedure.. kinda scuffed though while working through ide...
-		Runtime.getRuntime().addShutdownHook(new Thread() {
+		/*8Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				TextChannel channel = sarcastobot_jda.getTextChannelById(channel_id);
 				channel.sendMessage("I'm down for maintnance and a quick fuck with your mom. brb.").queue();
@@ -112,7 +119,7 @@ public class MainDiscordBot extends ListenerAdapter {
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
-	    System.exit(0);
+	    System.exit(0);*/
 	}
 
 }
