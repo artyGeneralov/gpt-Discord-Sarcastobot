@@ -87,6 +87,7 @@ public class DialogueInteractionListener extends ListenerAdapter {
 					ctx.add(ctx_msg);
 					return elaraAgent.interact(ctx);
 			});
+			
 			// handling the response with discord.
 			future.thenAccept(response -> {
 				String res = "";

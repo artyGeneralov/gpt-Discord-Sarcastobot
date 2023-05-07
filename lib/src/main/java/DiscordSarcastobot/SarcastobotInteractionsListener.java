@@ -35,13 +35,12 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 		if(!event.getChannel().getId().equals(channel_id)) return;
 		if(event.getAuthor().isBot()) return;
 		String user = event.getAuthor().getName();
-		
 		String content = user + ": " + event.getMessage().getContentDisplay();
 		
 		String waiting_msg = "__*Replying to user*:__ ***" + user +"*** ... ... ...";
 		
 		Message main_message = event.getChannel().sendMessage(waiting_msg).complete();
-		
+
 		// prepare users current prompt to be as the chatbot expects, look at SarcastoBot main prompt for details
 		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
 		String analysis = profilerAgent.getMapString(user);
@@ -52,9 +51,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 				
 				// add a message to the user context
 				user_ctx.add(ctx_msg);
-				// remove the oldest message if max user context size was reached (this is for ProfilerAgent)
-				//if(user_ctx.size() > max_user_ctx_size)
-				//	user_ctx.remove(0);
+				
 				analyzingCounter++;
 	
 				// remove the oldest message if max full context size was reached (this is for SarcastoBot)
@@ -89,12 +86,11 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 				full_ctx.add(response);
 			}
 			
-			// check if message contains a reference
+//			check if message contains a reference
 //			String text = "Hello <@JohnDoe>, how are you? <@JaneDoe> is also here.";
 //			Pattern pattern = Pattern.compile("<@.+?>");
 //			Matcher matcher = pattern.matcher(text);
 //			StringBuffer sb = new StringBuffer();
-//			
 //			while (matcher.find()) {
 //			    String replacement = "REPLACEMENT"; // generate replacement string here
 //			    matcher.appendReplacement(sb, replacement);
@@ -102,12 +98,8 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 //			matcher.appendTail(sb);
 //			String result = sb.toString();
 //			System.out.println(result);
-
+//			if(res.contains(user_list))
 			
-			
-			
-			
-			//if(res.contains(user_list))
 			main_message.editMessage(res).queue();
 		});
 	}
