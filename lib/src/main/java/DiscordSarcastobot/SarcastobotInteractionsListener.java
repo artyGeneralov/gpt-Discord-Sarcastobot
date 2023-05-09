@@ -45,10 +45,18 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
 		String analysis = profilerAgent.getMapString(user);
 		String user_list = profilerAgent.getUsers();
+
 		
 		CompletableFuture<ChatMessage> future = CompletableFuture.supplyAsync(() -> {
 			try {
 				
+				String referredUser = ""; 
+					if(!event.getMessage().getMentions().getUsers().isEmpty())
+						referredUser = event.getMessage().getMentions().getUsers().get(0).getName();
+				String referredAnalysis = profilerAgent.getMapString(referredUser); 
+				
+				System.out.println(referredUser + " @@@ referance ");
+				System.out.println(referredAnalysis + " @@@ referance anal ");
 				// add a message to the user context
 				user_ctx.add(ctx_msg);
 				
@@ -66,7 +74,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 					analyzingCounter = 0;
 				}
 				
-				return sarcastoBot.sarcasticAnswer(full_ctx, analysis, user_list);
+				return sarcastoBot.sarcasticAnswer(full_ctx, analysis, user_list, referredUser, referredAnalysis);
 			} catch (PolicyViolationError e) {
 				// returns blank message if there was a violation.
 				full_ctx.remove(full_ctx.size() - 1); // remove the previous message from context if flagged.
