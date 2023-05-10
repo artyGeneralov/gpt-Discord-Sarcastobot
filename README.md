@@ -23,9 +23,9 @@
             
 <h2><u><b> 10/05/2023:</b></u></h2> 
             <p>
-            A whole bunch of changes during the past week - <br>
+            A whole bunch of changes during the past week: <br>
             - made sarcastobot smarter by adding some regex to search for different strings<br>
-              and change prompts accordingly.
+              and change prompts accordingly.<br>
             - Added functionality to mention a user in your own message<br>
               and having sarcastobot startup with their analysis data as well. pretty fun thus far.
             <br><br>
