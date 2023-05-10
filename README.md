@@ -21,7 +21,7 @@
             Also made the bot respond to messages instead of /chat, this seems more fun.
             </p>
             
-<h2><u><b> 03/05/2023:</b></u></h2> 
+<h2><u><b> 10/05/2023:</b></u></h2> 
             <p>
             A whole bunch of changes during the past week - <br>
             - made sarcastobot smarter by adding some regex to search for different strings<br>
