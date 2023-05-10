@@ -20,3 +20,14 @@
             <b>2.)</b> The bot started to get confused about who he was talking to.<br><br>
             Also made the bot respond to messages instead of /chat, this seems more fun.
             </p>
+            
+<h2><u><b> 03/05/2023:</b></u></h2> 
+            <p>
+            A whole bunch of changes during the past week - <br>
+            - made sarcastobot smarter by adding some regex to search for different strings<br>
+              and change prompts accordingly.
+            - Added functionality to mention a user in your own message<br>
+              and having sarcastobot startup with their analysis data as well. pretty fun thus far.
+            <br><br>
+            <i>Tried</i> to do an experiment with two chatbots chatting to each other, but am struggling to make this interesting...
+            </p>
