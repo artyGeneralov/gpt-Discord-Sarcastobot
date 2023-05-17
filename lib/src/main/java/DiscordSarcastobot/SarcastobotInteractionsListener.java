@@ -40,9 +40,13 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 		String waiting_msg = "__*Replying to user*:__ ***" + user +"*** ... ... ...";
 		
 		Message main_message = event.getChannel().sendMessage(waiting_msg).complete();
+		if(content.length() > 800) {
+			main_message.editMessage(" Your prompt is too long and I refuse to pay for it! xD ").queue();
+			return;
+		}
 
 		// prepare users current prompt to be as the chatbot expects, look at SarcastoBot main prompt for details
-		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
+		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), user + ": " + content);
 		String analysis = profilerAgent.getMapString(user);
 		String user_list = profilerAgent.getUsers();
 
@@ -55,8 +59,6 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 						referredUser = event.getMessage().getMentions().getUsers().get(0).getName();
 				String referredAnalysis = profilerAgent.getMapString(referredUser); 
 				
-				System.out.println(referredUser + " @@@ referance ");
-				System.out.println(referredAnalysis + " @@@ referance anal ");
 				// add a message to the user context
 				user_ctx.add(ctx_msg);
 				
@@ -65,6 +67,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 				// remove the oldest message if max full context size was reached (this is for SarcastoBot)
 				while (full_ctx.size() >= max_full_ctx_size)
 						full_ctx.remove(0);
+				
 				full_ctx.add(ctx_msg);
 				
 				// send user messages to profilerAgent for analysis if the batch size was reached.
@@ -74,7 +77,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 					analyzingCounter = 0;
 				}
 				
-				return sarcastoBot.sarcasticAnswer(full_ctx, analysis, user_list, referredUser, referredAnalysis);
+				return sarcastoBot.sarcasticAnswer(full_ctx, user, analysis, user_list, referredUser, referredAnalysis);
 			} catch (PolicyViolationError e) {
 				// returns blank message if there was a violation.
 				full_ctx.remove(full_ctx.size() - 1); // remove the previous message from context if flagged.
@@ -91,6 +94,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 			else
 			{
 				res = response.getContent();
+				response.setContent("Sarcastobot: " + res);
 				full_ctx.add(response);
 			}
 			
