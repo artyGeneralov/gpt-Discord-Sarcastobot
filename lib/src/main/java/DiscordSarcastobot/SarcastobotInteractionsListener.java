@@ -46,7 +46,7 @@ public class SarcastobotInteractionsListener extends ListenerAdapter {
 		}
 
 		// prepare users current prompt to be as the chatbot expects, look at SarcastoBot main prompt for details
-		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), user + ": " + content);
+		ChatMessage ctx_msg = new ChatMessage(ChatMessageRole.USER.value(), content);
 		String analysis = profilerAgent.getMapString(user);
 		String user_list = profilerAgent.getUsers();
 

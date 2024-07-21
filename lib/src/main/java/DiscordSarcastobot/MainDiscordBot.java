@@ -28,15 +28,13 @@ public class MainDiscordBot extends ListenerAdapter {
 	final static String sarcastoBot_token = System.getenv("SARCASTOBOT_TOKEN");
 	final static String starting_msg = "__***Hi! I'm Sarcastobot!***__\n\n"
 								+ "__My commands are:__\n\n"
-								+ "~~__**/chat**__~~\n\n"
-								+ " __** The command /chat has been removed. I now respond to all messages!\n"
-								+ " **equality!!!**__\n\n"
 								+ "__**/clear**__ - This clears the whole context of the chat.\n"
 								+ "Currently everyone can use this, \n"
 								+ "please **don't troll** others though...\n clear only if necessary.\n\n"
 								+ "__**/anal**__ - This shows the analysis once it's ready.\n This is a temporary feature to show off profiling\n"
-								+ "__***New Feature***__:\n you can get analysis by username now,\n so please avoid cluttering the whole screen...\n\n"
-								+ "\nI currently do not have a message buffer, so if I'm flooded, I may drop a response. \nBut programmer's lazy so... shit happens? "
+								+ "You can get analysis by username now,\n so please avoid cluttering the whole screen...\n\n"
+								+ "\nI currently do not have a message buffer, so if I'm flooded, I may drop a response. \nBut programmer's lazy so... shit happens?\n "
+								+ " \n__** Im GPT-4 Now Bitches!** __"
 								+ "\n\n more on github:  https://github.com/artyGeneralov/gpt-Discord-Sarcastobot"
 								+ "";
 	
