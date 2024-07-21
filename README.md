@@ -5,7 +5,7 @@
 This is a bot written using the (back then) new OpenAI GPT API.<br>
 The idea was to provide a way for multiple people to converce with the AI simultaniously.<br>
 This was achieved by providing an elaborate prompt that would describe the chatting environment to the bot, and
-by adding the past few messages a predefined location in each prompt.<br>
+by adding the previous few messages in a predefined location in each prompt.<br><br>
 To improve the immersion, a second agent was deployed and tasked with writing some kind of analysis of the communicating parties.<br>
 This analysis is saved to a local file and for each individual that engages in conversation - the previous analysis is also passed as part of the prompt.<br>
 <br>
