@@ -1,5 +1,39 @@
 ﻿# gpt-Discord-Sarcastobot
 
+### Description:
+
+This is a bot written using the (back then) new OpenAI GPT API.<br>
+The idea was to provide a way for multiple people to converce with the AI simultaniously.<br>
+This was achieved by providing an elaborate prompt that would describe the chatting environment to the bot, and
+by adding the previous few messages in a predefined location in each prompt.<br><br>
+To improve the immersion, a second agent was deployed and tasked with writing some kind of analysis of the communicating parties.<br>
+This analysis is saved to a local file and for each individual that engages in conversation - the previous analysis is also passed as part of the prompt.<br>
+<br>
+This allowed conversation such as:<br>
+```markdown
+            Person_A: "Bot, please write a poem about @Person_B"
+```
+
+Due to the fact that Person_B was mentioned in the prompt, his analysis info would be passed to the bot and the bot would write the poem according to his "knowledge" of Person_B.<br><br>
+
+```markdown
+            Disclaimer: The "analysis" performed by the bot is based upon the users conversations, it never reflected any real
+            charechtaristics of any user.
+            Also, all users have been informed of the feature and each user could access his own assessment in a public channel.
+```
+
+The Sarcastic nature of the bot was made so that the users interaction would be enjoyable.<br><br>
+It was.<br>
+
+## Screenshots
+### Multiplayer-chat with sarcastobot
+![Chat](./assets/scr1.png)
+
+### User analysis on different users
+![Analysis](./assets/scr2.png)
+
+
+### Change Log:
 <h2><u><b> 01/05/2023:</b></u></h2>  
             <p>This is a rudementary discord bot that recieves user prompts, sends them to gpt-3.5-turbo model and responds with
             sarcastic answers and also makes fun of the users discord name.</p>
